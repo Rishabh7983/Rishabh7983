@@ -1,0 +1,10 @@
+# Bivariate analysis: Correlation matrix for numerical columns
+correlation_matrix = data[['price', 'rating', 'reviews']].corr()
+
+# Plotting the correlation matrix
+plt.figure(figsize=(8, 6))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f")
+plt.title('Correlation Matrix for Numerical Columns')
+plt.show()
+
+correlation_matrix
