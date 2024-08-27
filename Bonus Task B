@@ -1,0 +1,28 @@
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+
+# Preparing data for clustering (dropping unnecessary columns)
+X_cluster = data.drop(columns=['name', 'rating', 'reviews', 'warranty']).dropna()
+X_cluster = pd.get_dummies(X_cluster, drop_first=True)  # One-hot encode categorical variables
+
+# Applying PCA for dimensionality reduction
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_cluster)
+
+# Clustering using K-Means
+kmeans = KMeans(n_clusters=5, random_state=42)  # Assume 5 clusters
+clusters = kmeans.fit_predict(X_pca)
+
+# Adjust cluster assignment for the original DataFrame
+data_clean = data.dropna(subset=['battery', 'camera', 'display', 'memory', 'processor'])  # Match rows used for clustering
+data_clean['Cluster'] = clusters  # Assign clusters to the cleaned DataFrame
+
+# Visualizing the clusters (using data_clean)
+plt.figure(figsize=(10, 8))
+plt.scatter(X_pca[:, 0], X_pca[:, 1], c=data_clean['Cluster'], cmap='viridis', alpha=0.5)
+plt.title('Phone Clustering')
+plt.xlabel('PCA Component 1')
+plt.ylabel('PCA Component 2')
+plt.colorbar(label='Cluster')
+plt.show()
