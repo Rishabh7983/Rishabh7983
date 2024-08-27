@@ -1,10 +1,28 @@
-# Bivariate analysis: Correlation matrix for numerical columns
-correlation_matrix = data[['price', 'rating', 'reviews']].corr()
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-# Plotting the correlation matrix
-plt.figure(figsize=(8, 6))
-sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f")
-plt.title('Correlation Matrix for Numerical Columns')
+# Setting up the visualization style
+sns.set(style="whitegrid")
+
+# Univariate Analysis for numeric data
+plt.figure(figsize=(15, 10))
+
+# Price distribution
+plt.subplot(2, 2, 1)
+sns.histplot(data['price'], kde=True, color='blue')
+plt.title('Distribution of Price')
+
+# Rating distribution
+plt.subplot(2, 2, 2)
+sns.histplot(data['rating'].dropna(), kde=True, color='green')
+plt.title('Distribution of Rating')
+
+# Review count (converted to numeric)
+data['review_count'] = data['reviews'].str.replace(",", "").str.extract('(\d+)').astype(float)
+plt.subplot(2, 2, 3)
+sns.histplot(data['review_count'].dropna(), kde=True, color='orange')
+plt.title('Distribution of Review Count')
+
+plt.tight_layout()
 plt.show()
 
-correlation_matrix
